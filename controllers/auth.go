@@ -4,6 +4,7 @@ import (
     "net/http"
 
     "jwt-gin/models"
+    "jwt-gin/utils/token"
 
     "github.com/gin-gonic/gin"
 )
@@ -56,5 +57,27 @@ func Login(c *gin.Context) {
 
     c.JSON(http.StatusOK, gin.H{
         "token": token,
+    })
+}
+
+func CurrentUser(c *gin.Context) {
+    userId, err := token.ExtractTokenId(c)
+
+    if err != nil {
+        c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+        return
+    }
+
+    var user models.User
+
+    err = models.DB.First(&user, userId).Error
+
+    if err != nil {
+        c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{
+        "data": user.PrepareOutput(),
     })
 }
