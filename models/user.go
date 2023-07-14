@@ -1,6 +1,7 @@
 package models
 
 import (
+    "jwt-gin/utils/token"
     "strings"
 
     "github.com/jinzhu/gorm"
@@ -37,4 +38,24 @@ func (u *User) BeforeSave() error {
 func (u User) PrepareOutput() User {
     u.Password = ""
     return u
+}
+
+func GenerateToken(username string, password string) (string, error) {
+    var user User
+    
+    err := DB.Where("username = ?", username).First(&user).Error
+
+    err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+
+    if err != nil {
+        return "", err
+    }
+
+    token, err := token.GenerateToken(user.ID)
+
+    if err != nil {
+        return "", err
+    }
+
+    return token, nil
 }
