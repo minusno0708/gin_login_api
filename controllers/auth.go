@@ -10,6 +10,7 @@ import (
 )
 
 type RegisterInput struct {
+    UserID string `json:"user_id" binding:"required"`
     Username string `json:"username" binding:"required"`
     Password string `json:"password" binding:"required"`
 }
@@ -22,7 +23,7 @@ func Register(c *gin.Context) {
         return
     }
 
-    user := models.User{Username: input.Username, Password: input.Password}
+    user := models.User{UserID: input.UserID, Username: input.Username, Password: input.Password}
 
     user, err := user.Save()
     if err != nil {
