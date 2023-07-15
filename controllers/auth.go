@@ -37,7 +37,7 @@ func Register(c *gin.Context) {
 }
 
 type LoginInput struct {
-    Username string `json:"username" binding:"required"`
+    UserID string `json:"user_id" binding:"required"`
     Password string `json:"password" binding:"required"`
 }
 
@@ -49,7 +49,7 @@ func Login(c *gin.Context) {
         return
     }
 
-    token, err := models.GenerateToken(input.Username, input.Password)
+    token, err := models.GenerateToken(input.UserID, input.Password)
 
     if err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

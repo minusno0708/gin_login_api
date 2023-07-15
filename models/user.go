@@ -41,10 +41,10 @@ func (u User) PrepareOutput() User {
     return u
 }
 
-func GenerateToken(username string, password string) (string, error) {
+func GenerateToken(user_id string, password string) (string, error) {
     var user User
     
-    err := DB.Where("username = ?", username).First(&user).Error
+    err := DB.Where("user_id = ?", user_id).First(&user).Error
 
     err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 
