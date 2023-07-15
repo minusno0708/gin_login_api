@@ -1,13 +1,16 @@
-version: '3.1'
-
+# docker-compose.yml
+version: '3'
 services:
   db:
-    build: ./db
-    restart: always
+    build: .
     ports:
-      - ${DB_PORT}:3306
+      - "3307:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASS}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASS}
-      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_ROOT_PASSWORD: dev
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: dev
+      MYSQL_DATABASE: dev
+    volumes:
+      - db_data:/var/lib/mysql
+volumes:
+  db_data:
